@@ -66,3 +66,6 @@ app.listen(PORTA, () => {
   console.log(`✅ AgendaFlow rodando em http://localhost:${PORTA}`);
   console.log(`📅 Sistema de Agendamento e Gestão iniciado com sucesso!`);
 });
+
+// Exporta o app para que plataformas Serverless (como Vercel) consigam rodá-lo
+module.exports = app;

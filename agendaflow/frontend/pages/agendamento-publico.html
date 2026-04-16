@@ -91,9 +91,8 @@
 </div>
 
 <script>
-  // API URL mock - Este frontend precisa acessar o backend publicamente.
-  // Como estamos rodando na mesma máquina:
-  const API_URL = 'http://localhost:3003/api';
+  // API URL - Apontando de forma relativa para funcionar tanto local quanto no Vercel
+  const API_URL = '/api';
 
   // Configurar input de data minima para hoje
   const now = new Date();
