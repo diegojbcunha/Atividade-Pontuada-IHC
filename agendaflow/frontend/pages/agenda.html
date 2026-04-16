@@ -61,6 +61,7 @@
                 <i class="bi bi-chevron-right"></i>
               </button>
               <button class="btn btn-sm btn-outline-primary" id="btnHoje">Hoje</button>
+              <button class="btn btn-sm btn-primary ms-2" onclick="abrirModalNovo()"><i class="bi bi-plus-lg text-white"></i> Novo</button>
             </div>
             <!-- Seletor de visualização -->
             <div class="col-auto ms-auto">
@@ -113,6 +114,62 @@
         <div class="card-body" id="listaDia"></div>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- Modal Novo Agendamento -->
+<div class="modal fade" id="modalNovoAgendamento" tabindex="-1">
+  <div class="modal-dialog">
+    <form class="modal-content" id="formNovoAgendamento">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-calendar-plus me-2"></i>Novo Agendamento</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label">Título / Motivo *</label>
+          <input type="text" class="form-control" id="novoTitulo" required>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Início *</label>
+            <input type="datetime-local" class="form-control" id="novoInicio" required>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Fim *</label>
+            <input type="datetime-local" class="form-control" id="novoFim" required>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Cliente (Opcional)</label>
+          <select class="form-select" id="novoClienteId">
+            <option value="">Sem cliente associado</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Espaço (Opcional)</label>
+          <select class="form-select" id="novoEspacoId">
+            <option value="">Qualquer espaço</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Status</label>
+          <select class="form-select" id="novoStatus">
+            <option value="agendado">Agendado</option>
+            <option value="confirmado" selected>Confirmado</option>
+            <option value="pendente">Pendente</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Descrição / Observações</label>
+          <textarea class="form-control" id="novoDescricao" rows="2"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Salvar Agendamento</button>
+      </div>
+    </form>
   </div>
 </div>
 
@@ -335,12 +392,78 @@
     renderizar();
   });
 
+  // ========== LÓGICA DO NOVO AGENDAMENTO ==========
+  async function carregarDropdownsNovo() {
+    const espaços = await apiGet('/espacos');
+    const clientes = await apiGet('/clientes');
+    const selE = document.getElementById('novoEspacoId');
+    const selC = document.getElementById('novoClienteId');
+    if (espaços) espaços.filter(e => e.ativo).forEach(e => selE.innerHTML += `<option value="${e.id}">${e.nome}</option>`);
+    if (clientes) clientes.forEach(c => selC.innerHTML += `<option value="${c.id}">${c.nome}</option>`);
+  }
+
+  function abrirModalNovo() {
+    document.getElementById('formNovoAgendamento').reset();
+    
+    // Set min time to now
+    const now = new Date();
+    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+    const minString = now.toISOString().slice(0,16);
+    document.getElementById('novoInicio').min = minString;
+    
+    new bootstrap.Modal(document.getElementById('modalNovoAgendamento')).show();
+  }
+
+  document.getElementById('novoInicio').addEventListener('change', function() {
+    if(this.value) {
+      const fim = new Date(this.value);
+      fim.setHours(fim.getHours() + 1);
+      fim.setMinutes(fim.getMinutes() - fim.getTimezoneOffset());
+      document.getElementById('novoFim').value = fim.toISOString().slice(0,16);
+      document.getElementById('novoFim').min = this.value;
+    }
+  });
+
+  document.getElementById('formNovoAgendamento').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = this.querySelector('button[type="submit"]');
+    btn.disabled = true;
+
+    const body = {
+      titulo: document.getElementById('novoTitulo').value,
+      descricao: document.getElementById('novoDescricao').value,
+      data_inicio: new Date(document.getElementById('novoInicio').value).toISOString(),
+      data_fim: new Date(document.getElementById('novoFim').value).toISOString(),
+      status: document.getElementById('novoStatus').value,
+      cliente_id: document.getElementById('novoClienteId').value || null,
+      espaco_id: document.getElementById('novoEspacoId').value || null
+    };
+
+    const res = await apiPost('/agendamentos', body);
+    btn.disabled = false;
+    
+    if(res && !res.erro) {
+      mostrarToast('Agendamento criado com sucesso!', 'success');
+      bootstrap.Modal.getInstance(document.getElementById('modalNovoAgendamento')).hide();
+      inicializar(); // Recarrega a agenda
+    } else {
+      mostrarToast(res.erro || 'Erro ao criar', 'error');
+    }
+  });
+
   // Inicializa o calendário
   async function inicializar() {
+    carregarDropdownsNovo();
     todosAgendamentos = await apiGet('/agendamentos') || [];
     todosBloqueios = await apiGet('/bloqueios') || [];
     renderizarCabecalho();
     renderizar();
+
+    // Se vier do dashboard via "Novo" (!?novo=true)
+    if(window.location.search.includes('novo=true')) {
+      abrirModalNovo();
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
   }
 
   inicializar();

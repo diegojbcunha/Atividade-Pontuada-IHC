@@ -61,7 +61,7 @@ app.use((err, req, res, next) => {
 // ==========================================
 // Inicializa o servidor
 // ==========================================
-const PORTA = process.env.PORT || 3000;
+const PORTA = process.env.PORT || 3003;
 app.listen(PORTA, () => {
   console.log(`✅ AgendaFlow rodando em http://localhost:${PORTA}`);
   console.log(`📅 Sistema de Agendamento e Gestão iniciado com sucesso!`);

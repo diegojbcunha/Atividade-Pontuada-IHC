@@ -1,7 +1,7 @@
 // Camada de serviços do frontend
 // Centraliza todas as chamadas à API do backend
 
-const API_URL = 'http://localhost:3000/api';
+const API_URL = 'http://localhost:3003/api';
 
 // Retorna o token JWT salvo no localStorage
 function getToken() {
