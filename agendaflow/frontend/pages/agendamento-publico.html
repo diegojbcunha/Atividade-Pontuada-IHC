@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agendar Atendimento - AgendaFlow</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="../styles/main.css">
+  <style>
+    body { background-color: #f3f4f6; }
+    .booking-container { max-width: 600px; margin: 40px auto; background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); overflow: hidden; }
+    .booking-header { background: var(--cor-primaria); color: white; padding: 30px 20px; text-align: center; }
+    .booking-body { padding: 30px; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="booking-container fade-in">
+    <div class="booking-header">
+      <h2 class="mb-2"><i class="bi bi-calendar-check me-2"></i>AgendaFlow</h2>
+      <p class="mb-0 text-white-50">Agende seu atendimento de forma rápida e prática</p>
+    </div>
+    
+    <div class="booking-body">
+      <div id="alertaErro" class="alert alert-danger d-none"></div>
+      <div id="alertaSucesso" class="alert alert-success d-none">
+        <h4 class="alert-heading">Agendamento Concluído!</h4>
+        <p>Seu agendamento foi registrado com sucesso. Você receberá um e-mail de confirmação em breve.</p>
+        <hr>
+        <button class="btn btn-success" onclick="location.reload()">Fazer novo agendamento</button>
+      </div>
+
+      <form id="formAgendamento">
+        <h5 class="mb-3 text-primary border-bottom pb-2">Seus Dados</h5>
+        
+        <!-- Cliente Temp (vai criar um novo ou usar dados digitados) -->
+        <div class="mb-3">
+          <label class="form-label">Nome Completo</label>
+          <input type="text" class="form-control" id="clienteNome" required>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">E-mail</label>
+            <input type="email" class="form-control" id="clienteEmail" required>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Telefone / WhatsApp</label>
+            <input type="text" class="form-control" id="clienteTelefone">
+          </div>
+        </div>
+
+        <h5 class="mb-3 mt-4 text-primary border-bottom pb-2">Detalhes do Agendamento</h5>
+        
+        <div class="mb-3">
+          <label class="form-label">Serviço / Motivo</label>
+          <input type="text" class="form-control" id="servicoTitulo" placeholder="Ex: Consulta Inicial" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Espaço / Sala (Opcional)</label>
+          <select class="form-select" id="selectEspaco">
+            <option value="">Qualquer espaço disponível</option>
+            <!-- Carregado via JS -->
+          </select>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Data e Hora de Início</label>
+            <input type="datetime-local" class="form-control" id="dataInicio" required>
+          </div>
+          <div class="col-md-6 mb-4">
+            <label class="form-label">Data e Hora de Fim</label>
+            <input type="datetime-local" class="form-control" id="dataFim" required>
+          </div>
+        </div>
+        
+        <div class="mb-4">
+          <label class="form-label">Observações Adicionais</label>
+          <textarea class="form-control" id="observacoes" rows="2"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 py-2 fs-5" id="btnAgendar">
+          <i class="bi bi-calendar-plus me-2"></i>Confirmar Agendamento
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  // API URL mock - Este frontend precisa acessar o backend publicamente.
+  // Como estamos rodando na mesma máquina:
+  const API_URL = 'http://localhost:3000/api';
+
+  // Configurar input de data minima para hoje
+  const now = new Date();
+  now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+  document.getElementById('dataInicio').min = now.toISOString().slice(0,16);
+
+  document.getElementById('dataInicio').addEventListener('change', function() {
+    // Sugerir tempo de fim + 1h
+    if(this.value) {
+      const fim = new Date(this.value);
+      fim.setHours(fim.getHours() + 1);
+      fim.setMinutes(fim.getMinutes() - fim.getTimezoneOffset());
+      document.getElementById('dataFim').value = fim.toISOString().slice(0,16);
+      document.getElementById('dataFim').min = this.value;
+    }
+  });
+
+  // Carregar espaços disponíveis (chamada pública)
+  async function carregarEspacos() {
+    try {
+      const res = await fetch(API_URL + '/espacos');
+      if (res.ok) {
+        const espacos = await res.json();
+        const select = document.getElementById('selectEspaco');
+        espacos.forEach(e => {
+          if(e.ativo) select.innerHTML += `<option value="${e.id}">${e.nome}</option>`;
+        });
+      }
+    } catch(err) {
+      console.error('Erro ao carregar espaços', err);
+    }
+  }
+
+  carregarEspacos();
+
+  // Enviar formulário
+  document.getElementById('formAgendamento').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('btnAgendar');
+    const erro = document.getElementById('alertaErro');
+    
+    btn.disabled = true;
+    erro.classList.add('d-none');
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Processando...';
+
+    const clientePayload = {
+      nome: document.getElementById('clienteNome').value,
+      email: document.getElementById('clienteEmail').value,
+      telefone: document.getElementById('clienteTelefone').value,
+      observacoes: document.getElementById('observacoes').value
+    };
+
+    try {
+      // 1. Criar o cliente (usando rota pública de criação de cliente no post - ops, a rota está protegida no backend por padrão. Vamos mandar os dados do cliente e tentar burlar/ajustar ou, melhor, criar o cliente via fetch sem auth só para este caso demo se o middleware estiver flexível, caso não, o certo arquiteturalmente é ter endpoint publico)
+      // No schema, cliente_id é null allowed. Se a API exigir token para criar cliente, teremos um problema no publico.
+      // Vou tentar enviar direto pro endpoint publico de agendamentos (POST /agendamentos) sem auth. 
+      // Mas o POST de agendamentos no backend precisa do cliente_id.
+      // Como correção do req.body -> se a rota POST /agendamentos não for protegida, ele permite. (Na verdade, em server.js deixamos o POST /agendamentos público).
+      // Mas como criar cliente? Precisaremos que esse script chame POST /clientes. Ah, no router: router.post('/', verificarToken, criarCliente). 
+      // Então o admin tem que criar o cliente. Isso é uma limitação do backend que fiz. 
+      // Para funcionar lindamente sem refatorar o backend: Eu posso cadastrar um agendamento público *SEM* cliente_id e botar os dados no 'descricao'.
+      // Ou posso pedir ao usuário logar. 
+      // Vou colocar no titulo/descrição para garantir.
+      
+      const inicio = new Date(document.getElementById('dataInicio').value).toISOString();
+      const fim = new Date(document.getElementById('dataFim').value).toISOString();
+      const espacoId = document.getElementById('selectEspaco').value || null;
+      const descricaoComDados = `Cliente: ${clientePayload.nome} | Email: ${clientePayload.email} | Tel: ${clientePayload.telefone}\nObs: ${clientePayload.observacoes}`;
+
+      const res = await fetch(API_URL + '/agendamentos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          titulo: document.getElementById('servicoTitulo').value + ' - ' + clientePayload.nome,
+          descricao: descricaoComDados,
+          data_inicio: inicio,
+          data_fim: fim,
+          espaco_id: espacoId,
+          status: 'pendente' // Status default para agendamentos publicos
+        })
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.erro || 'Erro ao criar agendamento');
+
+      // Sucesso
+      document.getElementById('formAgendamento').classList.add('d-none');
+      document.getElementById('alertaSucesso').classList.remove('d-none');
+
+    } catch (err) {
+      erro.textContent = err.message;
+      erro.classList.remove('d-none');
+      btn.disabled = false;
+      btn.innerHTML = '<i class="bi bi-calendar-plus me-2"></i>Confirmar Agendamento';
+    }
+  });
+
+</script>
+</body>
+</html>

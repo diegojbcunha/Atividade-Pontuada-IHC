@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configurações - AgendaFlow</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="../styles/main.css">
+</head>
+<body>
+<div class="app-wrapper">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <h4><i class="bi bi-calendar-check me-2"></i>Agenda<span>Flow</span></h4>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Principal</div>
+      <a href="dashboard.html" class="nav-link"><i class="bi bi-speedometer2"></i> Dashboard</a>
+      <a href="agenda.html" class="nav-link"><i class="bi bi-calendar3"></i> Agenda</a>
+      <div class="nav-section-title">Gestão</div>
+      <a href="gerenciar-agendamentos.html" class="nav-link"><i class="bi bi-list-check"></i> Agendamentos</a>
+      <a href="clientes.html" class="nav-link"><i class="bi bi-people"></i> Clientes</a>
+      <a href="espacos.html" class="nav-link"><i class="bi bi-building"></i> Espaços</a>
+      <a href="bloqueios.html" class="nav-link"><i class="bi bi-slash-circle"></i> Bloqueios</a>
+      <a href="lembretes.html" class="nav-link"><i class="bi bi-bell"></i> Lembretes</a>
+      <div class="nav-section-title">Configurações</div>
+      <a href="configuracoes.html" class="nav-link active"><i class="bi bi-gear"></i> Personalização</a>
+      <a href="google-calendar.html" class="nav-link"><i class="bi bi-google"></i> Google Agenda</a>
+    </nav>
+    <div class="sidebar-footer" id="nomeUsuarioSidebar">–</div>
+  </aside>
+
+  <div class="main-content">
+    <div class="topbar">
+      <h1 class="topbar-title"><i class="bi bi-gear me-2 text-primary"></i>Configurações da Agenda</h1>
+      <div class="topbar-user">
+        <span id="nomeUsuarioTop">–</span>
+        <div class="avatar" id="avatarUsuario">?</div>
+      </div>
+    </div>
+
+    <div class="page-content fade-in">
+      <div class="card" style="max-width: 600px;">
+        <div class="card-header bg-white"><i class="bi bi-sliders me-2"></i>Personalize seu ambiente de agendamento</div>
+        <div class="card-body">
+          <form id="formConfig">
+            <h6 class="text-primary mt-2">Horário de Funcionamento padrão</h6>
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <label class="form-label">Abertura</label>
+                <input type="time" class="form-control" id="horaInicio" value="08:00" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Fechamento</label>
+                <input type="time" class="form-control" id="horaFim" value="18:00" required>
+              </div>
+            </div>
+
+            <h6 class="text-primary mt-4">Padrões de Agendamento</h6>
+            <div class="mb-3">
+              <label class="form-label">Intervalo padrão de agendamento (em minutos)</label>
+              <select class="form-select" id="intervaloMinutos">
+                <option value="15">15 minutos</option>
+                <option value="30" selected>30 minutos</option>
+                <option value="45">45 minutos</option>
+                <option value="60">1 hora</option>
+                <option value="120">2 horas</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Visão padrão do calendário</label>
+              <select class="form-select" id="visPadrao">
+                <option value="dia">Diária</option>
+                <option value="semana" selected>Semanal</option>
+                <option value="mes">Mensal</option>
+              </select>
+            </div>
+
+            <h6 class="text-primary mt-4">Dias de Operação</h6>
+            <div class="mb-4">
+              <div class="form-check form-check-inline mt-1"><input class="form-check-input dia-semana" type="checkbox" value="1" id="d1"><label class="form-check-label" for="d1">Seg</label></div>
+              <div class="form-check form-check-inline d-none"><input class="form-check-input dia-semana" type="checkbox" value="2" id="d2"><label class="form-check-label" for="d2">Ter</label></div>
+              <div class="form-check form-check-inline d-none"><input class="form-check-input dia-semana" type="checkbox" value="3" id="d3"><label class="form-check-label" for="d3">Qua</label></div>
+              <div class="form-check form-check-inline d-none"><input class="form-check-input dia-semana" type="checkbox" value="4" id="d4"><label class="form-check-label" for="d4">Qui</label></div>
+              <div class="form-check form-check-inline d-none"><input class="form-check-input dia-semana" type="checkbox" value="5" id="d5"><label class="form-check-label" for="d5">Sex</label></div>
+              <div class="d-flex gap-2 flex-wrap mb-2">
+                <!-- Checkboxes reais ocultos acima, UI nativa é feia, usando botões visuais como checkbox group -->
+                <button type="button" class="btn btn-outline-primary active dia-btn" data-val="1">Segunda</button>
+                <button type="button" class="btn btn-outline-primary active dia-btn" data-val="2">Terça</button>
+                <button type="button" class="btn btn-outline-primary active dia-btn" data-val="3">Quarta</button>
+                <button type="button" class="btn btn-outline-primary active dia-btn" data-val="4">Quinta</button>
+                <button type="button" class="btn btn-outline-primary active dia-btn" data-val="5">Sexta</button>
+                <button type="button" class="btn btn-outline-primary dia-btn" data-val="6">Sábado</button>
+                <button type="button" class="btn btn-outline-primary dia-btn" data-val="0">Domingo</button>
+              </div>
+            </div>
+
+            <div class="text-end mt-4">
+              <button type="submit" class="btn btn-primary px-4"><i class="bi bi-save me-2"></i>Salvar Configurações</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../services/api.js"></script>
+<script>
+  verificarLogin();
+  const usuario = getUsuario();
+  if (usuario) {
+    document.getElementById('nomeUsuarioTop').textContent = usuario.nome;
+    document.getElementById('nomeUsuarioSidebar').textContent = usuario.nome;
+    document.getElementById('avatarUsuario').textContent = usuario.nome.charAt(0).toUpperCase();
+  }
+
+  // Interação visual dos botões de dia
+  document.querySelectorAll('.dia-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      this.classList.toggle('active');
+    });
+  });
+
+  async function carregarConfiguracoes() {
+    const config = await apiGet('/configuracoes');
+    if (config && !config.erro) {
+      document.getElementById('horaInicio').value = config.hora_inicio || '08:00';
+      document.getElementById('horaFim').value = config.hora_fim || '18:00';
+      document.getElementById('intervaloMinutos').value = config.intervalo_minutos || 30;
+      document.getElementById('visPadrao').value = config.visualizacao_padrao || 'semana';
+      
+      if(config.dias_semana) {
+        const dias = config.dias_semana.split(',');
+        document.querySelectorAll('.dia-btn').forEach(btn => {
+          if(dias.includes(btn.dataset.val)) {
+            btn.classList.add('active');
+          } else {
+            btn.classList.remove('active');
+          }
+        });
+      }
+    }
+  }
+
+  document.getElementById('formConfig').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const dias = Array.from(document.querySelectorAll('.dia-btn.active')).map(btn => btn.dataset.val).join(',');
+
+    const body = {
+      hora_inicio: document.getElementById('horaInicio').value,
+      hora_fim: document.getElementById('horaFim').value,
+      intervalo_minutos: parseInt(document.getElementById('intervaloMinutos').value),
+      visualizacao_padrao: document.getElementById('visPadrao').value,
+      dias_semana: dias,
+      cor_padrao: '#2563EB' // default
+    };
+
+    const res = await apiPost('/configuracoes', body);
+    if(res && !res.erro) {
+      mostrarToast('Configurações salvas com sucesso!');
+    } else {
+      mostrarToast(res.erro || 'Erro ao salvar', 'error');
+    }
+  });
+
+  carregarConfiguracoes();
+</script>
+</body>
+</html>

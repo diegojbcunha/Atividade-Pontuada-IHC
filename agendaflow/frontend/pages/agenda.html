@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agenda - AgendaFlow</title>
+  <meta name="description" content="Calendário visual de agendamentos com status por cores">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="../styles/main.css">
+</head>
+<body>
+<div class="app-wrapper">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <h4><i class="bi bi-calendar-check me-2"></i>Agenda<span>Flow</span></h4>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Principal</div>
+      <a href="dashboard.html" class="nav-link"><i class="bi bi-speedometer2"></i> Dashboard</a>
+      <a href="agenda.html" class="nav-link active"><i class="bi bi-calendar3"></i> Agenda</a>
+      <div class="nav-section-title">Gestão</div>
+      <a href="gerenciar-agendamentos.html" class="nav-link"><i class="bi bi-list-check"></i> Agendamentos</a>
+      <a href="clientes.html" class="nav-link"><i class="bi bi-people"></i> Clientes</a>
+      <a href="espacos.html" class="nav-link"><i class="bi bi-building"></i> Espaços</a>
+      <a href="bloqueios.html" class="nav-link"><i class="bi bi-slash-circle"></i> Bloqueios</a>
+      <a href="lembretes.html" class="nav-link"><i class="bi bi-bell"></i> Lembretes</a>
+      <div class="nav-section-title">Configurações</div>
+      <a href="configuracoes.html" class="nav-link"><i class="bi bi-gear"></i> Personalização</a>
+      <a href="google-calendar.html" class="nav-link"><i class="bi bi-google"></i> Google Agenda</a>
+    </nav>
+    <div class="sidebar-footer" id="nomeUsuarioSidebar">–</div>
+  </aside>
+
+  <div class="main-content">
+    <div class="topbar">
+      <h1 class="topbar-title"><i class="bi bi-calendar3 me-2 text-primary"></i>Agenda</h1>
+      <div class="topbar-user">
+        <span id="nomeUsuarioTop">–</span>
+        <div class="avatar" id="avatarUsuario">?</div>
+        <button class="btn btn-sm btn-outline-secondary" onclick="limparSessao()">
+          <i class="bi bi-box-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="page-content fade-in">
+      <!-- Controles do calendário -->
+      <div class="card mb-3">
+        <div class="card-body py-2">
+          <div class="row align-items-center g-2">
+            <!-- Navegação de mês -->
+            <div class="col-auto d-flex align-items-center gap-2">
+              <button class="btn btn-sm btn-outline-secondary" id="btnAnterior">
+                <i class="bi bi-chevron-left"></i>
+              </button>
+              <h5 id="tituloMes" class="mb-0" style="min-width:160px; text-align:center;"></h5>
+              <button class="btn btn-sm btn-outline-secondary" id="btnProximo">
+                <i class="bi bi-chevron-right"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-primary" id="btnHoje">Hoje</button>
+            </div>
+            <!-- Seletor de visualização -->
+            <div class="col-auto ms-auto">
+              <div class="btn-group btn-group-sm" role="group">
+                <button type="button" class="btn btn-outline-primary active" id="btnMes" onclick="mudarVis('mes')">Mês</button>
+                <button type="button" class="btn btn-outline-primary" id="btnSemana" onclick="mudarVis('semana')">Semana</button>
+                <button type="button" class="btn btn-outline-primary" id="btnDia" onclick="mudarVis('dia')">Dia</button>
+              </div>
+            </div>
+            <!-- Legenda de status -->
+            <div class="col-12 d-flex flex-wrap gap-2 pt-1">
+              <span class="badge-status badge-agendado">● Agendado</span>
+              <span class="badge-status badge-confirmado">● Confirmado</span>
+              <span class="badge-status badge-pendente">● Pendente</span>
+              <span class="badge-status badge-cancelado">● Cancelado</span>
+              <span class="badge-status badge-concluido">● Concluído</span>
+              <span class="badge-status badge-bloqueado">● Bloqueado</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grid do calendário mensal -->
+      <div class="card" id="viewMes">
+        <div class="card-body p-2">
+          <div class="calendario-grid" id="cabecalhoDias">
+            <!-- Dias da semana -->
+          </div>
+          <div class="calendario-grid" id="gridCalendario">
+            <!-- Dias gerados pelo JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Visualização semanal -->
+      <div class="card d-none" id="viewSemana">
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-bordered mb-0" id="tabelaSemana">
+              <thead id="headSemana"></thead>
+              <tbody id="bodySemana"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Visualização diária -->
+      <div class="card d-none" id="viewDia">
+        <div class="card-header" id="tituloDia"></div>
+        <div class="card-body" id="listaDia"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de detalhes do agendamento -->
+<div class="modal fade" id="modalAgendamento" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-calendar-event me-2"></i>Detalhes do Agendamento</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="detalhesAgendamento"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        <a href="gerenciar-agendamentos.html" class="btn btn-primary">Gerenciar</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../services/api.js"></script>
+<script>
+  verificarLogin();
+  const usuario = getUsuario();
+  if (usuario) {
+    document.getElementById('nomeUsuarioTop').textContent = usuario.nome;
+    document.getElementById('nomeUsuarioSidebar').textContent = usuario.nome;
+    document.getElementById('avatarUsuario').textContent = usuario.nome.charAt(0).toUpperCase();
+  }
+
+  const DIAS_SEMANA = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+  const MESES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+
+  let dataAtual = new Date();
+  let todosAgendamentos = [];
+  let todosBloqueios = [];
+  let visualizacao = 'mes';
+
+  // Muda visualização (dia, semana, mês)
+  function mudarVis(vis) {
+    visualizacao = vis;
+    document.getElementById('viewMes').classList.toggle('d-none', vis !== 'mes');
+    document.getElementById('viewSemana').classList.toggle('d-none', vis !== 'semana');
+    document.getElementById('viewDia').classList.toggle('d-none', vis !== 'dia');
+    ['btnMes','btnSemana','btnDia'].forEach(id => document.getElementById(id).classList.remove('active'));
+    document.getElementById('btn' + vis.charAt(0).toUpperCase() + vis.slice(1)).classList.add('active');
+    renderizar();
+  }
+
+  // Cabeçalho dos dias da semana
+  function renderizarCabecalho() {
+    document.getElementById('cabecalhoDias').innerHTML = DIAS_SEMANA.map(d =>
+      `<div class="cal-header">${d}</div>`
+    ).join('');
+  }
+
+  // Renderiza a visão mensal
+  function renderizarMes() {
+    const ano = dataAtual.getFullYear();
+    const mes = dataAtual.getMonth();
+    document.getElementById('tituloMes').textContent = `${MESES[mes]} ${ano}`;
+
+    const primeiroDia = new Date(ano, mes, 1).getDay();
+    const totalDias = new Date(ano, mes + 1, 0).getDate();
+    const hoje = new Date();
+
+    let html = '';
+
+    // Dias vazios antes do início do mês
+    for (let i = 0; i < primeiroDia; i++) {
+      const diasAntes = new Date(ano, mes, 1 - (primeiroDia - i));
+      html += `<div class="cal-dia outro-mes"><div class="cal-dia-num text-muted">${diasAntes.getDate()}</div></div>`;
+    }
+
+    // Dias do mês
+    for (let dia = 1; dia <= totalDias; dia++) {
+      const data = new Date(ano, mes, dia);
+      const isHoje = data.toDateString() === hoje.toDateString();
+      const dataStr = `${ano}-${String(mes+1).padStart(2,'0')}-${String(dia).padStart(2,'0')}`;
+
+      // Agendamentos do dia
+      const agsdo = todosAgendamentos.filter(a => a.data_inicio && a.data_inicio.startsWith(dataStr));
+      const bloqs = todosBloqueios.filter(b => b.data_inicio && b.data_inicio.startsWith(dataStr));
+
+      const eventos = [
+        ...agsdo.map(a => `<div class="cal-evento" style="background:${a.cor || '#2563EB'}" title="${a.titulo}" onclick="mostrarDetalhes('${a.id}')">${a.titulo}</div>`),
+        ...bloqs.map(b => `<div class="cal-evento" style="background:#9CA3AF" title="Bloqueado: ${b.motivo || ''}">🚫 Bloqueado</div>`)
+      ];
+
+      html += `
+        <div class="cal-dia ${isHoje ? 'hoje' : ''}">
+          <div class="cal-dia-num">${dia}</div>
+          ${eventos.join('')}
+          ${eventos.length === 0 ? '' : ''}
+        </div>`;
+    }
+
+    document.getElementById('gridCalendario').innerHTML = html;
+  }
+
+  // Renderiza a visão semanal
+  function renderizarSemana() {
+    const inicio = new Date(dataAtual);
+    inicio.setDate(dataAtual.getDate() - dataAtual.getDay()); // Começo da semana (domingo)
+    document.getElementById('tituloMes').textContent = `Semana de ${inicio.toLocaleDateString('pt-BR')}`;
+
+    // Horas
+    const horas = Array.from({length: 13}, (_, i) => i + 7); // 07h às 19h
+
+    let thead = '<tr><th style="width:60px">Hora</th>';
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(inicio);
+      d.setDate(inicio.getDate() + i);
+      thead += `<th class="text-center">${DIAS_SEMANA[i]}<br><small>${d.getDate()}/${d.getMonth()+1}</small></th>`;
+    }
+    thead += '</tr>';
+
+    let tbody = '';
+    horas.forEach(hora => {
+      tbody += `<tr><td class="text-muted" style="font-size:11px;padding:4px 8px;">${String(hora).padStart(2,'0')}:00</td>`;
+      for (let i = 0; i < 7; i++) {
+        const d = new Date(inicio);
+        d.setDate(inicio.getDate() + i);
+        const dataHora = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}T${String(hora).padStart(2,'0')}`;
+
+        const ags = todosAgendamentos.filter(a => a.data_inicio && a.data_inicio.startsWith(dataHora.slice(0,13)));
+        const conteudo = ags.map(a =>
+          `<div class="cal-evento" style="background:${a.cor||'#2563EB'};font-size:10px;" onclick="mostrarDetalhes('${a.id}')">${a.titulo}</div>`
+        ).join('');
+
+        tbody += `<td style="min-height:40px;padding:2px 4px;">${conteudo}</td>`;
+      }
+      tbody += '</tr>';
+    });
+
+    document.getElementById('headSemana').innerHTML = thead;
+    document.getElementById('bodySemana').innerHTML = tbody;
+  }
+
+  // Renderiza a visão diária
+  function renderizarDia() {
+    const dia = dataAtual;
+    const dataStr = `${dia.getFullYear()}-${String(dia.getMonth()+1).padStart(2,'0')}-${String(dia.getDate()).padStart(2,'0')}`;
+    document.getElementById('tituloMes').textContent = dia.toLocaleDateString('pt-BR', { weekday:'long', day:'2-digit', month:'long', year:'numeric' });
+    document.getElementById('tituloDia').textContent = '📋 Agenda do dia';
+
+    const ags = todosAgendamentos.filter(a => a.data_inicio && a.data_inicio.startsWith(dataStr));
+    const bloqs = todosBloqueios.filter(b => b.data_inicio && b.data_inicio.startsWith(dataStr));
+
+    if (ags.length === 0 && bloqs.length === 0) {
+      document.getElementById('listaDia').innerHTML = '<p class="text-muted text-center py-3">Nenhum evento para este dia.</p>';
+      return;
+    }
+
+    const html = [
+      ...ags.map(a => `
+        <div class="d-flex align-items-start gap-3 mb-3 p-3 rounded" style="border-left:4px solid ${a.cor||'#2563EB'};background:#f9fafb;">
+          <div><i class="bi bi-calendar-event text-primary fs-5"></i></div>
+          <div>
+            <strong>${a.titulo}</strong><br>
+            <small class="text-muted">${formatarData(a.data_inicio)} → ${formatarData(a.data_fim)}</small><br>
+            <span class="badge-status badge-${a.status}">${a.status}</span>
+            ${a.clientes ? `<span class="ms-2 text-muted small"><i class="bi bi-person"></i> ${a.clientes.nome}</span>` : ''}
+          </div>
+        </div>
+      `),
+      ...bloqs.map(b => `
+        <div class="d-flex align-items-start gap-3 mb-3 p-3 rounded" style="border-left:4px solid #9CA3AF;background:#f9fafb;">
+          <div><i class="bi bi-slash-circle text-secondary fs-5"></i></div>
+          <div><strong>🚫 Horário Bloqueado</strong><br>
+            <small class="text-muted">${b.motivo || 'Sem motivo informado'}</small>
+          </div>
+        </div>
+      `)
+    ].join('');
+
+    document.getElementById('listaDia').innerHTML = html;
+  }
+
+  function renderizar() {
+    if (visualizacao === 'mes') renderizarMes();
+    else if (visualizacao === 'semana') renderizarSemana();
+    else renderizarDia();
+  }
+
+  // Mostrar detalhes do agendamento em modal
+  function mostrarDetalhes(id) {
+    const ag = todosAgendamentos.find(a => a.id === id);
+    if (!ag) return;
+    document.getElementById('detalhesAgendamento').innerHTML = `
+      <p><strong><i class="bi bi-calendar-event me-2"></i>Título:</strong> ${ag.titulo}</p>
+      <p><strong><i class="bi bi-clock me-2"></i>Início:</strong> ${formatarData(ag.data_inicio)}</p>
+      <p><strong><i class="bi bi-clock-fill me-2"></i>Fim:</strong> ${formatarData(ag.data_fim)}</p>
+      <p><strong><i class="bi bi-info-circle me-2"></i>Status:</strong> <span class="badge-status badge-${ag.status}">${ag.status}</span></p>
+      ${ag.clientes ? `<p><strong><i class="bi bi-person me-2"></i>Cliente:</strong> ${ag.clientes.nome}</p>` : ''}
+      ${ag.espacos ? `<p><strong><i class="bi bi-building me-2"></i>Espaço:</strong> ${ag.espacos.nome}</p>` : ''}
+      ${ag.descricao ? `<p><strong><i class="bi bi-text-paragraph me-2"></i>Descrição:</strong> ${ag.descricao}</p>` : ''}
+    `;
+    new bootstrap.Modal(document.getElementById('modalAgendamento')).show();
+  }
+
+  // Navegar entre períodos
+  document.getElementById('btnAnterior').addEventListener('click', () => {
+    if (visualizacao === 'mes') dataAtual.setMonth(dataAtual.getMonth() - 1);
+    else if (visualizacao === 'semana') dataAtual.setDate(dataAtual.getDate() - 7);
+    else dataAtual.setDate(dataAtual.getDate() - 1);
+    renderizar();
+  });
+
+  document.getElementById('btnProximo').addEventListener('click', () => {
+    if (visualizacao === 'mes') dataAtual.setMonth(dataAtual.getMonth() + 1);
+    else if (visualizacao === 'semana') dataAtual.setDate(dataAtual.getDate() + 7);
+    else dataAtual.setDate(dataAtual.getDate() + 1);
+    renderizar();
+  });
+
+  document.getElementById('btnHoje').addEventListener('click', () => {
+    dataAtual = new Date();
+    renderizar();
+  });
+
+  // Inicializa o calendário
+  async function inicializar() {
+    todosAgendamentos = await apiGet('/agendamentos') || [];
+    todosBloqueios = await apiGet('/bloqueios') || [];
+    renderizarCabecalho();
+    renderizar();
+  }
+
+  inicializar();
+</script>
+</body>
+</html>

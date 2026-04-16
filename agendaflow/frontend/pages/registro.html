@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro - AgendaFlow</title>
+  <meta name="description" content="Crie sua conta no AgendaFlow">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="../styles/main.css">
+</head>
+<body class="login-page">
+
+  <div class="login-card fade-in" style="max-width:460px;">
+    <div class="login-logo">
+      <div class="login-icon">
+        <i class="bi bi-calendar-check"></i>
+      </div>
+      <h2>AgendaFlow</h2>
+      <p>Crie sua conta de administrador</p>
+    </div>
+
+    <div id="alertaErro" class="alert alert-danger d-none"></div>
+    <div id="alertaSucesso" class="alert alert-success d-none"></div>
+
+    <form id="formRegistro">
+      <div class="mb-3">
+        <label for="nome" class="form-label">Nome completo</label>
+        <div class="input-group">
+          <span class="input-group-text"><i class="bi bi-person"></i></span>
+          <input type="text" class="form-control" id="nome" placeholder="Seu nome" required>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="email" class="form-label">E-mail</label>
+        <div class="input-group">
+          <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+          <input type="email" class="form-control" id="email" placeholder="seu@email.com" required>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="senha" class="form-label">Senha</label>
+        <div class="input-group">
+          <span class="input-group-text"><i class="bi bi-lock"></i></span>
+          <input type="password" class="form-control" id="senha" placeholder="Mínimo 6 caracteres" required minlength="6">
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <label for="confirmarSenha" class="form-label">Confirmar senha</label>
+        <div class="input-group">
+          <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+          <input type="password" class="form-control" id="confirmarSenha" placeholder="Repita a senha" required>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100" id="btnRegistrar">
+        <i class="bi bi-person-plus me-2"></i>Criar conta
+      </button>
+    </form>
+
+    <hr class="my-3">
+    <p class="text-center text-muted" style="font-size:13px; margin:0;">
+      Já tem conta?
+      <a href="login.html" style="color: var(--cor-primaria); font-weight:600;">Entrar</a>
+    </p>
+  </div>
+
+  <script src="../services/api.js"></script>
+  <script>
+    document.getElementById('formRegistro').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const alertaErro = document.getElementById('alertaErro');
+      const alertaSucesso = document.getElementById('alertaSucesso');
+      alertaErro.classList.add('d-none');
+      alertaSucesso.classList.add('d-none');
+
+      const nome = document.getElementById('nome').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const senha = document.getElementById('senha').value;
+      const confirmar = document.getElementById('confirmarSenha').value;
+
+      // Validação: senhas conferem?
+      if (senha !== confirmar) {
+        alertaErro.textContent = 'As senhas não conferem.';
+        alertaErro.classList.remove('d-none');
+        return;
+      }
+
+      const btn = document.getElementById('btnRegistrar');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Criando conta...';
+
+      const resultado = await apiPost('/auth/register', { nome, email, senha }, false);
+
+      if (resultado.usuario) {
+        alertaSucesso.textContent = 'Conta criada com sucesso! Redirecionando para o login...';
+        alertaSucesso.classList.remove('d-none');
+        setTimeout(() => window.location.href = 'login.html', 2000);
+      } else {
+        alertaErro.textContent = resultado.erro || 'Erro ao criar conta.';
+        alertaErro.classList.remove('d-none');
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-person-plus me-2"></i>Criar conta';
+      }
+    });
+  </script>
+</body>
+</html>

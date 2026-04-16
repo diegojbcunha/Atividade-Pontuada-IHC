@@ -1,0 +1,539 @@
+/* =============================================
+   AgendaFlow - Estilos Globais
+   Paleta: Azul #2563EB, Verde #10B981, 
+           Amarelo #F59E0B, Vermelho #EF4444
+   Fonte: Inter (Google Fonts)
+   ============================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700&display=swap');
+
+/* Variáveis de cores */
+:root {
+  --cor-primaria: #2563EB;
+  --cor-primaria-hover: #1D4ED8;
+  --cor-secundaria: #10B981;
+  --cor-alerta: #F59E0B;
+  --cor-erro: #EF4444;
+  --cor-neutro-claro: #F3F4F6;
+  --cor-neutro-escuro: #1F2937;
+  --cor-texto: #374151;
+  --cor-borda: #E5E7EB;
+  --cor-sidebar: #111827;
+  --cor-sidebar-item: #6B7280;
+  --cor-sidebar-ativo: #2563EB;
+  --sombra-card: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.05);
+  --sombra-modal: 0 20px 60px rgba(0,0,0,0.15);
+  --raio-borda: 10px;
+  --raio-borda-sm: 6px;
+}
+
+/* Reset e base */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--cor-neutro-claro);
+  color: var(--cor-texto);
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: 'Poppins', sans-serif;
+  color: var(--cor-neutro-escuro);
+  margin-bottom: 0.5rem;
+}
+
+/* =============================================
+   Layout principal (sidebar + conteúdo)
+   ============================================= */
+
+.app-wrapper {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar lateral */
+.sidebar {
+  width: 240px;
+  background: var(--cor-sidebar);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 1000;
+  transition: transform 0.3s ease;
+}
+
+.sidebar-brand {
+  padding: 24px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.sidebar-brand h4 {
+  color: white;
+  font-size: 1.2rem;
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+.sidebar-brand span {
+  color: var(--cor-primaria);
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 16px 0;
+  overflow-y: auto;
+}
+
+.nav-section-title {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--cor-sidebar-item);
+  padding: 8px 20px 4px;
+  margin-top: 8px;
+}
+
+.sidebar-nav .nav-link {
+  color: #9CA3AF;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 0;
+  transition: all 0.2s;
+  font-size: 13.5px;
+  text-decoration: none;
+}
+
+.sidebar-nav .nav-link:hover {
+  background: rgba(255,255,255,0.07);
+  color: white;
+}
+
+.sidebar-nav .nav-link.active {
+  background: rgba(37,99,235,0.15);
+  color: var(--cor-primaria);
+  border-left: 3px solid var(--cor-primaria);
+  font-weight: 600;
+}
+
+.sidebar-nav .nav-link i {
+  width: 18px;
+  text-align: center;
+}
+
+.sidebar-footer {
+  padding: 16px 20px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  font-size: 12px;
+  color: var(--cor-sidebar-item);
+}
+
+/* Área de conteúdo principal */
+.main-content {
+  margin-left: 240px;
+  flex: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Topbar */
+.topbar {
+  background: white;
+  border-bottom: 1px solid var(--cor-borda);
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.topbar-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--cor-neutro-escuro);
+  margin: 0;
+}
+
+.topbar-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--cor-texto);
+}
+
+.avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--cor-primaria);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+/* Conteúdo da página */
+.page-content {
+  padding: 24px;
+  flex: 1;
+}
+
+/* =============================================
+   Cards
+   ============================================= */
+
+.card {
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-borda);
+  box-shadow: var(--sombra-card);
+  background: white;
+}
+
+.card-header {
+  background: white;
+  border-bottom: 1px solid var(--cor-borda);
+  padding: 16px 20px;
+  font-weight: 600;
+  color: var(--cor-neutro-escuro);
+  font-size: 0.9rem;
+  border-radius: var(--raio-borda) var(--raio-borda) 0 0 !important;
+}
+
+/* Cards de estatística no dashboard */
+.stat-card {
+  background: white;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-borda);
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: var(--sombra-card);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.stat-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+}
+
+.stat-icon.azul { background: rgba(37,99,235,0.1); color: var(--cor-primaria); }
+.stat-icon.verde { background: rgba(16,185,129,0.1); color: var(--cor-secundaria); }
+.stat-icon.amarelo { background: rgba(245,158,11,0.1); color: var(--cor-alerta); }
+.stat-icon.vermelho { background: rgba(239,68,68,0.1); color: var(--cor-erro); }
+
+.stat-info h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--cor-neutro-escuro);
+}
+
+.stat-info p {
+  margin: 0;
+  font-size: 12px;
+  color: #6B7280;
+}
+
+/* =============================================
+   Badges de Status
+   ============================================= */
+
+.badge-status {
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  display: inline-block;
+}
+
+.badge-agendado   { background: rgba(37,99,235,0.12);  color: #1D4ED8; }
+.badge-confirmado { background: rgba(16,185,129,0.12); color: #059669; }
+.badge-pendente   { background: rgba(245,158,11,0.12); color: #B45309; }
+.badge-cancelado  { background: rgba(239,68,68,0.12);  color: #DC2626; }
+.badge-concluido  { background: rgba(107,114,128,0.12);color: #4B5563; }
+.badge-bloqueado  { background: rgba(156,163,175,0.12);color: #6B7280; }
+
+/* =============================================
+   Botões personalizados
+   ============================================= */
+
+.btn {
+  border-radius: var(--raio-borda-sm);
+  font-weight: 500;
+  font-size: 13.5px;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background: var(--cor-primaria);
+  border-color: var(--cor-primaria);
+}
+
+.btn-primary:hover {
+  background: var(--cor-primaria-hover);
+  border-color: var(--cor-primaria-hover);
+}
+
+.btn-success {
+  background: var(--cor-secundaria);
+  border-color: var(--cor-secundaria);
+}
+
+.btn-success:hover {
+  background: #059669;
+  border-color: #059669;
+}
+
+/* =============================================
+   Formulários
+   ============================================= */
+
+.form-control, .form-select {
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-borda-sm);
+  font-size: 13.5px;
+  padding: 8px 12px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--cor-primaria);
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+}
+
+.form-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--cor-neutro-escuro);
+  margin-bottom: 4px;
+}
+
+/* =============================================
+   Tabelas
+   ============================================= */
+
+.table {
+  font-size: 13.5px;
+}
+
+.table thead th {
+  background: var(--cor-neutro-claro);
+  color: #6B7280;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid var(--cor-borda);
+  padding: 10px 16px;
+}
+
+.table tbody td {
+  padding: 12px 16px;
+  vertical-align: middle;
+  border-color: var(--cor-borda);
+}
+
+.table tbody tr:hover {
+  background: rgba(37,99,235,0.03);
+}
+
+/* =============================================
+   Calendário (grade visual)
+   ============================================= */
+
+.calendario-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  padding: 8px;
+}
+
+.cal-header {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: #6B7280;
+  text-transform: uppercase;
+  padding: 6px 0;
+}
+
+.cal-dia {
+  min-height: 90px;
+  background: white;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-borda-sm);
+  padding: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+  position: relative;
+}
+
+.cal-dia:hover {
+  background: rgba(37,99,235,0.04);
+}
+
+.cal-dia.outro-mes {
+  background: var(--cor-neutro-claro);
+  opacity: 0.5;
+}
+
+.cal-dia.hoje {
+  border-color: var(--cor-primaria);
+  box-shadow: 0 0 0 2px rgba(37,99,235,0.2);
+}
+
+.cal-dia-num {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--cor-neutro-escuro);
+  margin-bottom: 4px;
+}
+
+.cal-evento {
+  font-size: 10px;
+  padding: 2px 5px;
+  border-radius: 3px;
+  color: white;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+/* =============================================
+   Toast de notificação
+   ============================================= */
+
+.toast-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+}
+
+/* =============================================
+   Página de login (tela cheia)
+   ============================================= */
+
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1e3a8a 0%, #2563EB 50%, #3B82F6 100%);
+}
+
+.login-card {
+  background: white;
+  border-radius: 16px;
+  padding: 40px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: var(--sombra-modal);
+}
+
+.login-logo {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.login-logo h2 {
+  color: var(--cor-primaria);
+  font-size: 1.6rem;
+  margin: 8px 0 4px;
+}
+
+.login-logo p {
+  color: #6B7280;
+  font-size: 13px;
+  margin: 0;
+}
+
+.login-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, var(--cor-primaria), #3B82F6);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: white;
+  margin: 0 auto;
+}
+
+/* =============================================
+   Responsividade
+   ============================================= */
+
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+
+  .sidebar.aberta {
+    transform: translateX(0);
+  }
+
+  .main-content {
+    margin-left: 0;
+  }
+
+  .page-content {
+    padding: 16px;
+  }
+
+  .calendario-grid {
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+  }
+
+  .cal-dia {
+    min-height: 55px;
+    padding: 3px;
+  }
+}
+
+/* =============================================
+   Animações suaves
+   ============================================= */
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
