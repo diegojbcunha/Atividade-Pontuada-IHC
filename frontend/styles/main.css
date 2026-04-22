@@ -500,28 +500,58 @@ h1, h2, h3, h4, h5 {
 @media (max-width: 768px) {
   .sidebar {
     transform: translateX(-100%);
+    box-shadow: none;
   }
 
   .sidebar.aberta {
     transform: translateX(0);
+    box-shadow: 0 0 0 100vw rgba(0,0,0,0.4);
   }
 
   .main-content {
     margin-left: 0;
   }
 
+  .topbar {
+    padding: 10px 16px;
+  }
+
   .page-content {
-    padding: 16px;
+    padding: 12px;
+  }
+
+  /* Otimiza tela de login */
+  .login-card {
+    padding: 24px;
+    margin: 16px;
   }
 
   .calendario-grid {
-    grid-template-columns: repeat(7, 1fr);
     gap: 2px;
+    padding: 2px;
   }
 
   .cal-dia {
-    min-height: 55px;
-    padding: 3px;
+    min-height: 50px;
+    padding: 2px;
+  }
+
+  .cal-dia-num {
+    font-size: 11px;
+    margin-bottom: 2px;
+  }
+
+  /* Compactar eventos visuais no cel: somem os textos curtos e viram badgedots */
+  .cal-dia .cal-evento {
+    color: transparent;
+    overflow: hidden;
+    height: 8px;
+    width: 8px;
+    min-width: 8px;
+    border-radius: 50%;
+    margin: 1px auto;
+    padding: 0;
+    display: inline-block;
   }
 }
 

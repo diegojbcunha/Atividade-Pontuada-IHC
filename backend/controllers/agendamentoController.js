@@ -2,6 +2,7 @@
 // Gerencia criação, listagem, atualização de status e cancelamento de agendamentos
 
 const supabase = require('../config/supabase');
+const { syncAgendamentoBackground, deleteAgendamentoBackground } = require('../services/googleCalendarService');
 
 // Mapa de cores por status
 const coresPorStatus = {
@@ -95,6 +96,12 @@ async function criarAgendamento(req, res) {
     .single();
 
   if (error) return res.status(500).json({ erro: error.message });
+
+  // Dispara Sincronização em background para o Google
+  if (data && data.id && usuario_id) {
+    syncAgendamentoBackground(usuario_id, data.id);
+  }
+
   res.status(201).json(data);
 }
 
@@ -118,6 +125,12 @@ async function atualizarStatus(req, res) {
     .single();
 
   if (error) return res.status(500).json({ erro: error.message });
+
+  // Sincronizar alteração de status em background (ex: cancelado, confirmado)
+  if (data && data.id && data.usuario_id) {
+    syncAgendamentoBackground(data.usuario_id, data.id);
+  }
+
   res.json(data);
 }
 
@@ -137,15 +150,35 @@ async function atualizarAgendamento(req, res) {
     .single();
 
   if (error) return res.status(500).json({ erro: error.message });
+
+  // Sincronizar edição de datas/textos em background
+  if (data && data.id && data.usuario_id) {
+    syncAgendamentoBackground(data.usuario_id, data.id);
+  }
+
   res.json(data);
 }
 
 // Excluir agendamento
 async function excluirAgendamento(req, res) {
   const { id } = req.params;
+
+  // Busca se ele está salvo no Google antes de destruí-lo no banco
+  const { data: agendamento } = await supabase
+    .from('agendamentos')
+    .select('usuario_id, google_event_id')
+    .eq('id', id)
+    .single();
+
   const { error } = await supabase.from('agendamentos').delete().eq('id', id);
 
   if (error) return res.status(500).json({ erro: error.message });
+
+  // Após deletado do sistema, aciona exclusão no Google
+  if (agendamento && agendamento.google_event_id && agendamento.usuario_id) {
+    deleteAgendamentoBackground(agendamento.usuario_id, agendamento.google_event_id);
+  }
+
   res.json({ mensagem: 'Agendamento excluído.' });
 }
 

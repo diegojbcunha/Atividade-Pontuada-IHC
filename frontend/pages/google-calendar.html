@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,169 +9,165 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <link rel="stylesheet" href="../styles/main.css">
 </head>
+
 <body>
-<div class="app-wrapper">
+  <div class="app-wrapper">
 
-  <!-- Sidebar -->
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-brand">
-      <h4><i class="bi bi-calendar-check me-2"></i>Agenda<span>Flow</span></h4>
-    </div>
-    <nav class="sidebar-nav">
-      <div class="nav-section-title">Principal</div>
-      <a href="dashboard.html" class="nav-link"><i class="bi bi-speedometer2"></i> Dashboard</a>
-      <a href="agenda.html" class="nav-link"><i class="bi bi-calendar3"></i> Agenda</a>
-      <div class="nav-section-title">Gestão</div>
-      <a href="gerenciar-agendamentos.html" class="nav-link"><i class="bi bi-list-check"></i> Agendamentos</a>
-      <a href="clientes.html" class="nav-link"><i class="bi bi-people"></i> Clientes</a>
-      <a href="espacos.html" class="nav-link"><i class="bi bi-building"></i> Espaços</a>
-      <a href="bloqueios.html" class="nav-link"><i class="bi bi-slash-circle"></i> Bloqueios</a>
-      <a href="lembretes.html" class="nav-link"><i class="bi bi-bell"></i> Lembretes</a>
-      <div class="nav-section-title">Configurações</div>
-      <a href="configuracoes.html" class="nav-link"><i class="bi bi-gear"></i> Personalização</a>
-      <a href="google-calendar.html" class="nav-link active"><i class="bi bi-google"></i> Google Agenda</a>
-    </nav>
-    <div class="sidebar-footer" id="nomeUsuarioSidebar">–</div>
-  </aside>
-
-  <div class="main-content">
-    <div class="topbar">
-      <h1 class="topbar-title"><i class="bi bi-google me-2 text-primary"></i>Integração Google Agenda</h1>
-      <div class="topbar-user">
-        <span id="nomeUsuarioTop">–</span>
-        <div class="avatar" id="avatarUsuario">?</div>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <h4><i class="bi bi-calendar-check me-2"></i>Agenda<span>Flow</span></h4>
       </div>
-    </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">Principal</div>
+        <a href="dashboard.html" class="nav-link"><i class="bi bi-speedometer2"></i> Dashboard</a>
+        <a href="agenda.html" class="nav-link"><i class="bi bi-calendar3"></i> Agenda</a>
+        <div class="nav-section-title">Gestão</div>
+        <a href="gerenciar-agendamentos.html" class="nav-link"><i class="bi bi-list-check"></i> Agendamentos</a>
+        <a href="clientes.html" class="nav-link"><i class="bi bi-people"></i> Clientes</a>
+        <a href="espacos.html" class="nav-link"><i class="bi bi-building"></i> Espaços</a>
+        <a href="bloqueios.html" class="nav-link"><i class="bi bi-slash-circle"></i> Bloqueios</a>
+        <a href="lembretes.html" class="nav-link"><i class="bi bi-bell"></i> Lembretes</a>
+        <div class="nav-section-title">Configurações</div>
+        <a href="configuracoes.html" class="nav-link"><i class="bi bi-gear"></i> Personalização</a>
+        <a href="google-calendar.html" class="nav-link active"><i class="bi bi-google"></i> Google Agenda</a>
+      </nav>
+      <div class="sidebar-footer" id="nomeUsuarioSidebar">–</div>
+    </aside>
 
-    <div class="page-content fade-in">
-      
-      <!-- Aviso de sucesso de conexão -->
-      <div id="msgSucessoConexao" class="alert alert-success d-none mb-4">
-        <i class="bi bi-check-circle-fill me-2"></i>Sua conta do Google Calendar foi conectada com sucesso!
+    <div class="main-content">
+      <div class="topbar">
+        <h1 class="topbar-title"><i class="bi bi-google me-2 text-primary"></i>Integração Google Agenda</h1>
+        <div class="topbar-user">
+          <span id="nomeUsuarioTop">–</span>
+          <div class="avatar" id="avatarUsuario">?</div>
+        </div>
       </div>
 
-      <div class="row">
-        <!-- Conta do Google -->
-        <div class="col-md-6 mb-4">
-          <div class="card h-100">
-            <div class="card-body text-center py-5">
-              <i class="bi bi-google text-danger mb-3" style="font-size: 3rem;"></i>
-              <h4 class="mb-2">Sincronização Bidirecional</h4>
-              <p class="text-muted mb-4 px-4" style="font-size:13.5px;">
-                Vincule sua conta Google para refletir na sua agenda principal todos os atendimentos marcados no AgendaFlow.
-              </p>
-              
-              <div id="areaDesconectada">
-                <button class="btn btn-outline-danger fw-bold px-4" id="btnConectar" onclick="conectarGoogle()">
-                  <i class="bi bi-box-arrow-in-right me-2"></i>Conectar Conta Google
-                </button>
-              </div>
+      <div class="page-content fade-in">
 
-              <div id="areaConectada" class="d-none">
-                <span class="badge bg-success mb-3 fs-6 p-2 rounded-pill shadow-sm"><i class="bi bi-check-lg me-1"></i>Conectado com sucesso</span>
-                <br>
-                <div class="d-grid mt-3 gap-2 px-5">
-                  <button class="btn btn-primary" onclick="sincronizarTodos()"><i class="bi bi-arrow-repeat me-2"></i>Sincronizar Agendamentos</button>
-                  <button class="btn btn-outline-secondary btn-sm" onclick="listarEventos()"><i class="bi bi-eye"></i> Ver Eventos Atuais</button>
+        <!-- Aviso de sucesso de conexão -->
+        <div id="msgSucessoConexao" class="alert alert-success d-none mb-4">
+          <i class="bi bi-check-circle-fill me-2"></i>Sua conta do Google Calendar foi conectada com sucesso!
+        </div>
+
+        <div class="row">
+          <!-- Conta do Google -->
+          <div class="col-md-6 mb-4">
+            <div class="card h-100">
+              <div class="card-body text-center py-5">
+                <i class="bi bi-google text-danger mb-3" style="font-size: 3rem;"></i>
+                <h4 class="mb-2">Sincronização Bidirecional</h4>
+                <p class="text-muted mb-4 px-4" style="font-size:13.5px;">
+                  Vincule sua conta Google para refletir na sua agenda principal todos os atendimentos marcados no
+                  AgendaFlow.
+                </p>
+
+                <div id="areaDesconectada">
+                  <button class="btn btn-outline-danger fw-bold px-4" id="btnConectar" onclick="conectarGoogle()">
+                    <i class="bi bi-box-arrow-in-right me-2"></i>Conectar Conta Google
+                  </button>
+                </div>
+
+                <div id="areaConectada" class="d-none">
+                  <span class="badge bg-success mb-3 fs-6 p-2 rounded-pill shadow-sm"><i
+                      class="bi bi-check-lg me-1"></i>Conectado com sucesso</span>
+                  <br>
+                  <div class="d-grid mt-3 gap-2 px-5">
+                    <button class="btn btn-primary" onclick="sincronizarTodos()"><i
+                        class="bi bi-arrow-repeat me-2"></i>Sincronizar Agendamentos</button>
+                    <button class="btn btn-outline-secondary btn-sm" onclick="listarEventos()"><i class="bi bi-eye"></i>
+                      Ver Eventos Atuais</button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Instruções de Uso / status -->
-        <div class="col-md-6 mb-4">
-          <div class="card h-100">
-            <div class="card-header bg-light"><i class="bi bi-shield-check me-2"></i>Como Funciona</div>
-            <div class="card-body">
-              <ul class="list-unstyled mb-0" style="font-size:13.5px;">
-                <li class="mb-3 d-flex"><i class="bi bi-1-circle text-primary me-3 fs-5"></i><span>O administrador precisa configurar as credenciais no GCloud Console.</span></li>
-                <li class="mb-3 d-flex"><i class="bi bi-2-circle text-primary me-3 fs-5"></i><span>Após plugar <code>GOOGLE_CLIENT_ID</code> e <code>SECRET</code> no <code>.env</code>, autorize a aplicação.</span></li>
-                <li class="mb-3 d-flex"><i class="bi bi-3-circle text-primary me-3 fs-5"></i><span>Seus eventos aparecerão na agenda do App.</span></li>
-              </ul>
-              
-              <div class="mt-4 border-top pt-3" id="areaListagemEventos" style="display:none; max-height:200px; overflow-y:auto;">
-                <h6>Eventos da sua conta Google:</h6>
-                <ul class="list-group list-group-flush" id="listaGcal"></ul>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
-
     </div>
   </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="../services/api.js"></script>
-<script>
-  verificarLogin();
-  const usuario = getUsuario();
-  if (usuario) {
-    document.getElementById('nomeUsuarioTop').textContent = usuario.nome;
-    document.getElementById('nomeUsuarioSidebar').textContent = usuario.nome;
-    document.getElementById('avatarUsuario').textContent = usuario.nome.charAt(0).toUpperCase();
-  }
-
-  // Verifica se veio do redirect /callback com sucesso
-  const urlParams = new URLSearchParams(window.location.search);
-  if(urlParams.get('conectado') === 'true') {
-    document.getElementById('msgSucessoConexao').classList.remove('d-none');
-    // Remove o query param
-    window.history.replaceState({}, document.title, window.location.pathname);
-  }
-
-  async function verificarStatusGoogle() {
-    // Verifica se já tem token
-    const config = await apiGet('/configuracoes');
-    if(config && config.google_token) {
-      document.getElementById('areaDesconectada').classList.add('d-none');
-      document.getElementById('areaConectada').classList.remove('d-none');
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../services/api.js"></script>
+  <script>
+    verificarLogin();
+    const usuario = getUsuario();
+    if (usuario) {
+      document.getElementById('nomeUsuarioTop').textContent = usuario.nome;
+      document.getElementById('nomeUsuarioSidebar').textContent = usuario.nome;
+      document.getElementById('avatarUsuario').textContent = usuario.nome.charAt(0).toUpperCase();
     }
-  }
 
-  async function conectarGoogle() {
-    const res = await apiGet('/google/autorizar');
-    if(res && res.url_autorizacao) {
-      window.location.href = res.url_autorizacao;
-    } else {
-      mostrarToast('A integração requer configuração no servidor', 'error');
+    // Verifica se veio do redirect /callback com sucesso
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('conectado') === 'true') {
+      document.getElementById('msgSucessoConexao').classList.remove('d-none');
+      // Remove o query param
+      window.history.replaceState({}, document.title, window.location.pathname);
     }
-  }
 
-  async function sincronizarTodos() {
-    mostrarToast('Iniciando sincronização...');
-    const agendamentos = await apiGet('/agendamentos');
-    if(agendamentos && agendamentos.length > 0) {
-      let count = 0;
-      for (const a of agendamentos) {
-        if(a.status === 'agendado' || a.status === 'confirmado') {
-          await apiPost('/google/sincronizar', { agendamento_id: a.id });
-          count++;
-        }
+    async function verificarStatusGoogle() {
+      // Verifica se já tem token
+      const config = await apiGet('/configuracoes');
+      if (config && config.google_token) {
+        document.getElementById('areaDesconectada').classList.add('d-none');
+        document.getElementById('areaConectada').classList.remove('d-none');
       }
-      mostrarToast(`Sincronização terminada (${count} eventos)`, 'success');
     }
-  }
 
-  async function listarEventos() {
-    const ul = document.getElementById('listaGcal');
-    ul.innerHTML = '<li class="list-group-item text-center">Buscando...</li>';
-    document.getElementById('areaListagemEventos').style.display = 'block';
+    async function conectarGoogle() {
+      const res = await apiGet('/google/autorizar');
+      if (res && res.url_autorizacao) {
+        window.location.href = res.url_autorizacao;
+      } else {
+        mostrarToast('A integração requer configuração no servidor', 'error');
+      }
+    }
 
-    const evs = await apiGet('/google/eventos');
-    if(evs && !evs.erro && evs.length > 0) {
-      ul.innerHTML = evs.map(e => `
+    async function sincronizarTodos() {
+      mostrarToast('Iniciando sincronização bidirecional...');
+      const agendamentos = await apiGet('/agendamentos');
+      if (agendamentos && agendamentos.length > 0) {
+        let count = 0;
+        for (const a of agendamentos) {
+          if ((a.status === 'agendado' || a.status === 'confirmado') && !a.google_event_id) {
+            await apiPost('/google/sincronizar', { agendamento_id: a.id }).catch(() => null);
+            count++;
+          }
+        }
+        if (count > 0) mostrarToast(`Exportação terminada (${count} enviados)`, 'success');
+      }
+
+      // Importar eventos do Google
+      mostrarToast('Buscando eventos no Google...', 'info');
+      const importacao = await apiPost('/google/importar');
+      if (importacao && importacao.mensagem) {
+        mostrarToast(importacao.mensagem, 'success');
+      }
+
+      listarEventos();
+    }
+
+    async function listarEventos() {
+      const ul = document.getElementById('listaGcal');
+      ul.innerHTML = '<li class="list-group-item text-center">Buscando...</li>';
+      document.getElementById('areaListagemEventos').style.display = 'block';
+
+      const evs = await apiGet('/google/eventos');
+      if (evs && !evs.erro && evs.length > 0) {
+        ul.innerHTML = evs.map(e => `
         <li class="list-group-item d-flex justify-content-between align-items-center">
           <small>${e.summary}</small> <span class="badge bg-primary rounded-pill">1</span>
         </li>`).join('');
-    } else {
-      ul.innerHTML = '<li class="list-group-item text-muted text-center"><small>Nenhum evento recente encontrado.</small></li>';
+      } else {
+        ul.innerHTML = '<li class="list-group-item text-muted text-center"><small>Nenhum evento recente encontrado.</small></li>';
+      }
     }
-  }
 
-  verificarStatusGoogle();
-</script>
+    verificarStatusGoogle();
+  </script>
 </body>
+
 </html>

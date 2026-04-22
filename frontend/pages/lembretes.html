@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,54 +9,48 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <link rel="stylesheet" href="../styles/main.css">
 </head>
+
 <body>
-<div class="app-wrapper">
+  <div class="app-wrapper">
 
-  <!-- Sidebar -->
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-brand">
-      <h4><i class="bi bi-calendar-check me-2"></i>Agenda<span>Flow</span></h4>
-    </div>
-    <nav class="sidebar-nav">
-      <div class="nav-section-title">Principal</div>
-      <a href="dashboard.html" class="nav-link"><i class="bi bi-speedometer2"></i> Dashboard</a>
-      <a href="agenda.html" class="nav-link"><i class="bi bi-calendar3"></i> Agenda</a>
-      <div class="nav-section-title">Gestão</div>
-      <a href="gerenciar-agendamentos.html" class="nav-link"><i class="bi bi-list-check"></i> Agendamentos</a>
-      <a href="clientes.html" class="nav-link"><i class="bi bi-people"></i> Clientes</a>
-      <a href="espacos.html" class="nav-link"><i class="bi bi-building"></i> Espaços</a>
-      <a href="bloqueios.html" class="nav-link"><i class="bi bi-slash-circle"></i> Bloqueios</a>
-      <a href="lembretes.html" class="nav-link active"><i class="bi bi-bell"></i> Lembretes</a>
-      <div class="nav-section-title">Configurações</div>
-      <a href="configuracoes.html" class="nav-link"><i class="bi bi-gear"></i> Personalização</a>
-      <a href="google-calendar.html" class="nav-link"><i class="bi bi-google"></i> Google Agenda</a>
-    </nav>
-    <div class="sidebar-footer" id="nomeUsuarioSidebar">–</div>
-  </aside>
-
-  <div class="main-content">
-    <div class="topbar">
-      <h1 class="topbar-title"><i class="bi bi-bell me-2 text-primary"></i>Lembretes e Notificações</h1>
-      <div class="topbar-user">
-        <span id="nomeUsuarioTop">–</span>
-        <div class="avatar" id="avatarUsuario">?</div>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <h4><i class="bi bi-calendar-check me-2"></i>Agenda<span>Flow</span></h4>
       </div>
-    </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">Principal</div>
+        <a href="dashboard.html" class="nav-link"><i class="bi bi-speedometer2"></i> Dashboard</a>
+        <a href="agenda.html" class="nav-link"><i class="bi bi-calendar3"></i> Agenda</a>
+        <div class="nav-section-title">Gestão</div>
+        <a href="gerenciar-agendamentos.html" class="nav-link"><i class="bi bi-list-check"></i> Agendamentos</a>
+        <a href="clientes.html" class="nav-link"><i class="bi bi-people"></i> Clientes</a>
+        <a href="espacos.html" class="nav-link"><i class="bi bi-building"></i> Espaços</a>
+        <a href="bloqueios.html" class="nav-link"><i class="bi bi-slash-circle"></i> Bloqueios</a>
+        <a href="lembretes.html" class="nav-link active"><i class="bi bi-bell"></i> Lembretes</a>
+        <div class="nav-section-title">Configurações</div>
+        <a href="configuracoes.html" class="nav-link"><i class="bi bi-gear"></i> Personalização</a>
+        <a href="google-calendar.html" class="nav-link"><i class="bi bi-google"></i> Google Agenda</a>
+      </nav>
+      <div class="sidebar-footer" id="nomeUsuarioSidebar">–</div>
+    </aside>
 
-    <div class="page-content fade-in">
-      <div class="alert alert-info d-flex align-items-center">
-        <i class="bi bi-info-circle-fill fs-4 me-3"></i>
-        <div>
-          <strong>Sistema de Lembretes:</strong> 
-          Para enviar lembretes aos clientes, o backend precisa estar configurado com credenciais de e-mail <code>EMAIL_USER</code> e <code>EMAIL_PASS</code> no arquivo <code>.env</code>.
+    <div class="main-content">
+      <div class="topbar">
+        <h1 class="topbar-title"><i class="bi bi-bell me-2 text-primary"></i>Lembretes e Notificações</h1>
+        <div class="topbar-user">
+          <span id="nomeUsuarioTop">–</span>
+          <div class="avatar" id="avatarUsuario">?</div>
         </div>
       </div>
+
 
       <div class="row g-4">
         <!-- Próximos Eventos p/ lembrar -->
         <div class="col-lg-6">
           <div class="card h-100">
-            <div class="card-header bg-primary text-white" style="border-radius: var(--raio-borda) var(--raio-borda) 0 0;">
+            <div class="card-header bg-primary text-white"
+              style="border-radius: var(--raio-borda) var(--raio-borda) 0 0;">
               <i class="bi bi-envelope-paper me-2"></i>Disparar Lembrete Manual
             </div>
             <div class="card-body p-0">
@@ -69,7 +64,9 @@
                     </tr>
                   </thead>
                   <tbody id="tabelaAEnviar">
-                    <tr><td colspan="3" class="text-center py-4">Carregando...</td></tr>
+                    <tr>
+                      <td colspan="3" class="text-center py-4">Carregando...</td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -92,7 +89,9 @@
                     </tr>
                   </thead>
                   <tbody id="tabelaEnviados">
-                    <tr><td colspan="3" class="text-center py-4">Carregando...</td></tr>
+                    <tr>
+                      <td colspan="3" class="text-center py-4">Carregando...</td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -103,45 +102,45 @@
 
     </div>
   </div>
-</div>
+  </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="../services/api.js"></script>
-<script>
-  verificarLogin();
-  const usuario = getUsuario();
-  if (usuario) {
-    document.getElementById('nomeUsuarioTop').textContent = usuario.nome;
-    document.getElementById('nomeUsuarioSidebar').textContent = usuario.nome;
-    document.getElementById('avatarUsuario').textContent = usuario.nome.charAt(0).toUpperCase();
-  }
-
-  async function carregarAEnviar() {
-    // Busca agendamentos futuros não cancelados/concluidos
-    const ags = await apiGet('/agendamentos');
-    const tbody = document.getElementById('tabelaAEnviar');
-
-    if (!ags) {
-      tbody.innerHTML = '<tr><td colspan="3" class="text-center py-4 text-muted">Erro ao carregar.</td></tr>';
-      return;
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../services/api.js"></script>
+  <script>
+    verificarLogin();
+    const usuario = getUsuario();
+    if (usuario) {
+      document.getElementById('nomeUsuarioTop').textContent = usuario.nome;
+      document.getElementById('nomeUsuarioSidebar').textContent = usuario.nome;
+      document.getElementById('avatarUsuario').textContent = usuario.nome.charAt(0).toUpperCase();
     }
 
-    const agora = new Date().toISOString();
-    const futuros = ags.filter(a => a.data_inicio > agora && ['agendado', 'confirmado'].includes(a.status));
+    async function carregarAEnviar() {
+      // Busca agendamentos futuros não cancelados/concluidos
+      const ags = await apiGet('/agendamentos');
+      const tbody = document.getElementById('tabelaAEnviar');
 
-    if (futuros.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="3" class="text-center py-4 text-muted">Nenhum evento futuro apto para lembrete.</td></tr>';
-      return;
-    }
+      if (!ags) {
+        tbody.innerHTML = '<tr><td colspan="3" class="text-center py-4 text-muted">Erro ao carregar.</td></tr>';
+        return;
+      }
 
-    tbody.innerHTML = futuros.map(a => `
+      const agora = new Date().toISOString();
+      const futuros = ags.filter(a => a.data_inicio > agora && ['agendado', 'confirmado'].includes(a.status));
+
+      if (futuros.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" class="text-center py-4 text-muted">Nenhum evento futuro apto para lembrete.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = futuros.map(a => `
       <tr>
         <td>
           <div class="fw-bold">${a.titulo}</div>
           <div class="small text-muted">${formatarData(a.data_inicio)}</div>
         </td>
         <td>
-          ${a.clientes ? `<div>${a.clientes.nome}</div><div class="small text-muted">${a.clientes.email||''}</div>` : '<span class="text-muted">Sem cliente</span>'}
+          ${a.clientes ? `<div>${a.clientes.nome}</div><div class="small text-muted">${a.clientes.email || ''}</div>` : '<span class="text-muted">Sem cliente</span>'}
         </td>
         <td class="text-end">
           <button class="btn btn-sm btn-primary" onclick="enviarLembrete('${a.id}', this)" ${(!a.clientes || !a.clientes.email) ? 'disabled title="Cliente sem email"' : ''}>
@@ -150,18 +149,18 @@
         </td>
       </tr>
     `).join('');
-  }
-
-  async function carregarEnviados() {
-    const lemb = await apiGet('/lembretes');
-    const tbody = document.getElementById('tabelaEnviados');
-
-    if (!lemb || lemb.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="3" class="text-center py-4 text-muted">Nenhum lembrete enviado.</td></tr>';
-      return;
     }
 
-    tbody.innerHTML = lemb.map(l => `
+    async function carregarEnviados() {
+      const lemb = await apiGet('/lembretes');
+      const tbody = document.getElementById('tabelaEnviados');
+
+      if (!lemb || lemb.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" class="text-center py-4 text-muted">Nenhum lembrete enviado.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = lemb.map(l => `
       <tr>
         <td>
           <div class="fw-bold">${l.agendamentos ? l.agendamentos.titulo : 'Excluído'}</div>
@@ -171,29 +170,30 @@
         <td><span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>Enviado</span></td>
       </tr>
     `).join('');
-  }
-
-  async function enviarLembrete(agendamentoId, btn) {
-    const textoOriginal = btn.innerHTML;
-    btn.disabled = true;
-    btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Enviando...';
-
-    const res = await apiPost(`/lembretes/enviar/${agendamentoId}`);
-    
-    if (res && !res.erro) {
-      mostrarToast('E-mail enviado com sucesso!', 'success');
-      carregarEnviados();
-      btn.innerHTML = '<i class="bi bi-check2"></i> Enviado';
-      btn.classList.replace('btn-primary','btn-success');
-    } else {
-      mostrarToast(res.erro || 'Falha ao enviar e-mail. Verifique a configuração no .env do backend.', 'error');
-      btn.disabled = false;
-      btn.innerHTML = textoOriginal;
     }
-  }
 
-  carregarAEnviar();
-  carregarEnviados();
-</script>
+    async function enviarLembrete(agendamentoId, btn) {
+      const textoOriginal = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Enviando...';
+
+      const res = await apiPost(`/lembretes/enviar/${agendamentoId}`);
+
+      if (res && !res.erro) {
+        mostrarToast('E-mail enviado com sucesso!', 'success');
+        carregarEnviados();
+        btn.innerHTML = '<i class="bi bi-check2"></i> Enviado';
+        btn.classList.replace('btn-primary', 'btn-success');
+      } else {
+        mostrarToast(res.erro || 'Falha ao enviar e-mail. Verifique a configuração no .env do backend.', 'error');
+        btn.disabled = false;
+        btn.innerHTML = textoOriginal;
+      }
+    }
+
+    carregarAEnviar();
+    carregarEnviados();
+  </script>
 </body>
+
 </html>

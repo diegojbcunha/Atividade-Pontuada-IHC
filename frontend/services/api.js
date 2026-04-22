@@ -155,3 +155,69 @@ function formatarDataSimples(dataString) {
   if (!dataString) return '-';
   return new Date(dataString).toLocaleDateString('pt-BR');
 }
+
+// ==========================================
+// Injeção Automática de Responsividade
+// ==========================================
+document.addEventListener("DOMContentLoaded", () => {
+  const topbar = document.querySelector('.topbar');
+  const sidebar = document.getElementById('sidebar');
+
+  // Adiciona o botão de hambúrguer na topbar
+  if (topbar && sidebar && !document.getElementById('btnMenuMobile')) {
+    const title = topbar.querySelector('.topbar-title');
+    if (title) {
+      const leftContainer = document.createElement('div');
+      leftContainer.className = 'd-flex align-items-center gap-2';
+      
+      const btn = document.createElement('button');
+      btn.id = 'btnMenuMobile';
+      btn.className = 'btn d-md-none p-0 border-0 text-primary';
+      btn.innerHTML = '<i class="bi bi-list fs-3"></i>';
+      btn.onclick = (e) => {
+        e.stopPropagation(); // Impede duplo acionamento 
+        sidebar.classList.add('aberta');
+      };
+      
+      topbar.insertBefore(leftContainer, title);
+      leftContainer.appendChild(btn);
+      leftContainer.appendChild(title);
+      title.style.margin = '0';
+    }
+  }
+
+  // Adiciona o botão de fechar dentro da sidebar (visível apenas no mobile)
+  const sidebarBrand = document.querySelector('.sidebar-brand');
+  if (sidebarBrand && !document.getElementById('btnCloseSidebar')) {
+    sidebarBrand.classList.add('d-flex', 'justify-content-between', 'align-items-center');
+    
+    const btnClose = document.createElement('button');
+    btnClose.id = 'btnCloseSidebar';
+    btnClose.className = 'btn text-white d-md-none p-0 border-0';
+    btnClose.innerHTML = '<i class="bi bi-x fs-1"></i>';
+    btnClose.onclick = () => sidebar.classList.remove('aberta');
+    
+    sidebarBrand.appendChild(btnClose);
+  }
+
+  // Permitir fechar o sidebar clicando na parte escura (fora do menu)
+  document.addEventListener('click', (e) => {
+    if (sidebar && sidebar.classList.contains('aberta') && window.innerWidth <= 768) {
+      if (!sidebar.contains(e.target) && e.target.id !== 'btnMenuMobile') {
+        sidebar.classList.remove('aberta');
+      }
+    }
+  });
+
+  // Automação para transformar TODAS as tabelas em Responsivas (rolagem horizontal suave)
+  const tabelas = document.querySelectorAll('table.table');
+  tabelas.forEach(table => {
+    // Só envelopa se o elemento 'pai' ainda não for o table-responsive do bootstrap
+    if (!table.parentElement.classList.contains('table-responsive')) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'table-responsive border-0 m-0 p-0';
+      table.parentNode.insertBefore(wrapper, table);
+      wrapper.appendChild(table);
+    }
+  });
+});
